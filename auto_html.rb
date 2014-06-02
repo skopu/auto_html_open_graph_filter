@@ -47,12 +47,12 @@ AutoHtml.add_filter(:opengraph_link).with({}) do |text, options|
         image = og.image.detect{|i| remote_file_exists?(i)}
         html += "<div class='og'>"
         html += "<img src=#{image} >" if image.present?
-	      html += "<p class='og_title'>#{og.title}</p>" 
-	      html += "<p class='og_url'>#{og.site_name}</p>"
-	      html += "<p class='og_description'>#{og.description}</p></div>"
-	      html 
-	    else
-	    	url
+        html += "<p class='og_title'>#{og.title}</p>" 
+        html += "<p class='og_url'>#{og.site_name}</p>"
+        html += "<p class='og_description'>#{og.description}</p></div>"
+        html 
+      else
+    	url
       end
     end
   end
