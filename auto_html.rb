@@ -16,6 +16,16 @@ AutoHtml.add_filter(:opengraph_link).with({}) do |text, options|
       end
     end
   end
+  
+  def render_article(og)
+    image = og.image.detect{|i| remote_file_exists?(i)}
+    html += "<div class='og'>"
+    html += "<img src=#{image} >" if image.present?
+    html += "<p class='og_title'>#{og.title}</p>" 
+    html += "<p class='og_url'>#{og.site_name}</p>"
+    html += "<p class='og_description'>#{og.description}</p></div>"
+    html
+  end
 
   option_short_link_name = options.delete(:short_link_name)
   attributes = Array(options).reject { |k,v| v.nil? }.map { |k, v| %{#{k}="#{REXML::Text::normalize(v)}"} }.join(' ')
@@ -29,13 +39,7 @@ AutoHtml.add_filter(:opengraph_link).with({}) do |text, options|
       url.gsub!('www.','http://') if url.match(/^www./).present?
       og = UrlScraper.fetch(url)
       if og
-        image = og.image.detect{|i| remote_file_exists?(i)}
-        html += "<div class='og'>"
-        html += "<img src=#{image} >" if image.present?
-        html += "<p class='og_title'>#{og.title}</p>" 
-        html += "<p class='og_url'>#{og.site_name}</p>"
-        html += "<p class='og_description'>#{og.description}</p></div>"
-        html
+        render_article(og)
       else 
         uri.to_s
       end
@@ -44,15 +48,9 @@ AutoHtml.add_filter(:opengraph_link).with({}) do |text, options|
       url.gsub!('www.','http://') if url.match(/^www./).present?
       og = UrlScraper.fetch(url)
       if og
-        image = og.image.detect{|i| remote_file_exists?(i)}
-        html += "<div class='og'>"
-        html += "<img src=#{image} >" if image.present?
-        html += "<p class='og_title'>#{og.title}</p>" 
-        html += "<p class='og_url'>#{og.site_name}</p>"
-        html += "<p class='og_description'>#{og.description}</p></div>"
-        html 
+        render_article(og) 
       else
-    	url
+    	  url
       end
     end
   end
