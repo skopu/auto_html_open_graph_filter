@@ -50,7 +50,7 @@ AutoHtml.add_filter(:opengraph_link).with({}) do |text, options|
       if og
         render_article(og) 
       else
-    	  url
+        url
       end
     end
   end
